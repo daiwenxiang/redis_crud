@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>add.html</title>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div id="app">
+  <form action="" id="addForm">
+    name: <input name="name" placeholder="name" type="text"><br>
+    did: <input name="did" placeholder="did" type="text"><br>
+    <a @click="save" href="javascript:void(0)">保存新增</a>
+    <a href="index.html">返回首页</a>
+  </form>
+</div>
+</body>
+<script>
+  new Vue({
+    el: "#app",
+    data: {},
+    methods: {
+      save() {
+        $.ajax({
+          url: "http://localhost:8080/add",
+          type: "post",
+          data: $("#addForm").serialize(),
+          success: (data) => {
+            console.log("add=", data)
+            if (data == 1) {
+              alert("添加成功")
+              location.href = "/index.html"
+            } else {
+              alert("添加失败")
+            }
+          }
+        })
+      }
+    }
+  })
+</script>
+</html>

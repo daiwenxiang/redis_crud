@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.dwx.springboot_redis_423.mapper.EmpMapper">
+  <insert id="addEmp">
+    insert into emp values
+    <foreach collection="list" item="emp" separator=",">
+      (default, #{emp.name}, #{emp.did})
+    </foreach>
+  </insert>
+</mapper>

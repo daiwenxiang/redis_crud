@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>index.html</title>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div id="app">
+  <a href="add.html">新增</a>
+
+  <table border="2" class="table table-hover">
+    <tr>
+      <th>编号</th>
+      <th>姓名</th>
+      <th>部门编号</th>
+      <th colspan="2">操作</th>
+    </tr>
+    <tr v-for="emp in pageinfo.list">
+      <td>{{ emp.id }}</td>
+      <td>{{ emp.name }}</td>
+      <td>{{ emp.did }}</td>
+      <td>
+        <a @click="del(emp.id)" href="javascript:void(0)">删除</a>
+        <a @click="update(emp.id)" href="javascript:void(0)">修改</a>
+      </td>
+    </tr>
+  </table>
+
+  <nav aria-label="">
+    <ul class="pager">
+      <li><a @click="getByPage(1)" href="javascript:void(0) ">首页</a></li>
+      <li><a @click="getByPage(pageinfo.prePage)" href="javascript:void(0)">上一页</a></li>
+      <li><a @click="getByPage(pageinfo.nextPage)" href="javascript:void(0)">下一页</a></li>
+      <li><a @click="getByPage(pageinfo.pages)" href="javascript:void(0)">末页</a></li>
+    </ul>
+  </nav>
+
+</div>
+</body>
+<script>
+  const app = new Vue({
+    el: "#app",
+    data: {
+      pageinfo: {},
+    },
+    methods: {
+      update(id) {
+        // location.href="/update.html?id=" + id
+        location.href = `/update.html?id=${id}`
+      },
+      del(id) {
+        if (confirm("确认删除" + id + "吗?")) {
+          $.ajax({
+            url: "/del",
+            type: "delete",
+            data: "id=" + id,
+            success: (data) => {
+              console.log("delete--data=", data)
+              if (data == 1) {
+                alert("删除成功")
+                this.getByPage(1)
+              } else {
+                alert("删除失败")
+              }
+            }
+          })
+        }
+      },
+      getByPage(pageNum) {
+        $.get("http://localhost:8080/getByPage", "pageNum=" + pageNum, (data) => {
+          console.log("getByPage--data=", data)
+          this.pageinfo = data
+        })
+      }
+    },
+    mounted: function () {
+      this.getByPage(1)
+    }
+  })
+</script>
+</html>
